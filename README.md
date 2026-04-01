@@ -7,6 +7,7 @@ A lightweight CLI for logging daily dev notes and journal entries from the termi
 - Quick entry creation with titles, tags, and content
 - Full-text search across all entries
 - Tag-based organization and filtering
+- TODO tracking with priorities, due dates, and projects
 - Markdown export for sharing or archiving
 - Configuration for default tags and storage paths
 - No external dependencies — pure Python standard library
@@ -94,6 +95,35 @@ journal config set default_tag "dev"
 journal config path
 ```
 
+### Track TODOs
+
+Tasks that keep slipping through the cracks — with priorities, due dates, and project grouping:
+
+```bash
+journal todo add --task "Refactor auth middleware" --priority high --due 2026-04-20 --project backend
+journal todo add --task "Update API docs" --project docs
+echo "Fix lint errors in utils.py" | journal todo add --priority low
+```
+
+List and filter TODOs:
+
+```bash
+journal todo list
+journal todo list --status open
+journal todo list --priority critical
+journal todo list --project backend
+journal todo list --overdue
+```
+
+Manage TODOs:
+
+```bash
+journal todo edit 20260413102345 --status in_progress --note "Started working on it"
+journal todo done 20260413102345
+journal todo delete 20260413102345
+journal todo stats
+```
+
 ## Data Storage
 
 All data is stored in `~/.cli-journal-notes/`:
@@ -102,6 +132,7 @@ All data is stored in `~/.cli-journal-notes/`:
 |--------------------|----------------------------|
 | `entries.json`     | All journal entries        |
 | `config.json`      | User configuration         |
+| `todos.json`       | TODO items                 |
 
 Each entry stores: `id`, `title`, `tag`, `content`, `created_at`, and `updated_at`.
 
@@ -117,6 +148,12 @@ Each entry stores: `id`, `title`, `tag`, `content`, `created_at`, and `updated_a
 | `journal tags`                 | Show all tags with counts    |
 | `journal export`               | Export to markdown file      |
 | `journal config`               | Manage configuration         |
+| `journal todo add`             | Add a TODO item              |
+| `journal todo list` / `ls`     | List TODOs with filters      |
+| `journal todo done <id>`       | Mark TODO as complete        |
+| `journal todo edit <id>`       | Edit a TODO item             |
+| `journal todo delete` / `rm`   | Delete a TODO item           |
+| `journal todo stats`           | Show TODO statistics         |
 
 ## Examples
 
@@ -136,6 +173,14 @@ Export weekly notes for review:
 
 ```bash
 journal export -o ~/weekly-notes.md
+```
+
+Track a slipping task:
+
+```bash
+journal todo add -t "Migrate to OAuth2" --priority high --due 2026-04-25 --project auth
+journal todo list --overdue
+journal todo stats
 ```
 
 ## Requirements
