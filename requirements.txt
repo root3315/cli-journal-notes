@@ -1,0 +1,2 @@
+# cli-journal-notes has no external dependencies.
+# All functionality uses Python 3.6+ standard library modules.
